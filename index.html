@@ -431,6 +431,7 @@
                 
                 this.element = document.createElement('div');
                 this.element.className = 'cheese-cat';
+                this.element.style.overflow = 'hidden';
                 
                 const img = document.createElement('div');
                 img.style.width = '128px';
@@ -463,47 +464,58 @@
             updateSprite() {
                 let row = 0;
                 let col = 0;
+                let maxFrames = 8; // 기본값
 
                 switch(this.state) {
                     case 'sitting1':
                         row = 0;
-                        col = this.frame % 8;
+                        maxFrames = 4;
+                        col = this.frame % maxFrames;
                         break;
                     case 'sitting2':
                         row = 1;
-                        col = this.frame % 8;
+                        maxFrames = 4;
+                        col = this.frame % maxFrames;
                         break;
                     case 'grooming1':
                         row = 2;
-                        col = this.frame % 8;
+                        maxFrames = 4;
+                        col = this.frame % maxFrames;
                         break;
                     case 'grooming2':
                         row = 3;
-                        col = this.frame % 8;
+                        maxFrames = 4;
+                        col = this.frame % maxFrames;
                         break;
                     case 'walking':
                         row = 4;
-                        col = this.frame % 8;
+                        maxFrames = 8;
+                        col = this.frame % maxFrames;
                         break;
                     case 'running':
                         row = 5;
-                        col = this.frame % 8;
+                        maxFrames = 8;
+                        col = this.frame % maxFrames;
                         break;
                     case 'sleeping':
                         row = 6;
-                        col = this.frame % 8;
+                        maxFrames = 4;
+                        col = this.frame % maxFrames;
                         break;
                     case 'playing':
                         row = 7;
-                        col = this.frame % 8;
+                        maxFrames = 4;
+                        col = this.frame % maxFrames;
                         break;
                     case 'jumping':
                         row = 8;
-                        col = this.frame % 8;
+                        maxFrames = 8;
+                        col = this.frame % maxFrames;
                         break;
                     case 'stretching':
                         row = 9;
-                        col = this.frame % 8;
+                        maxFrames = 8;
+                        col = this.frame % maxFrames;
                         break;
                 }
 
@@ -622,7 +634,7 @@
         }
 
         header.addEventListener('click', (e) => {
-            if (draggedCat || cats.length > 0) return;
+            if (draggedCat || cats.length > 0) return; // 이미 고양이가 있으면 추가 안함
             const rect = header.getBoundingClientRect();
             const x = e.clientX - rect.left - 64;
             const y = e.clientY - rect.top - 64;
