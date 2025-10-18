@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yusom Jo - Researcher Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px 60px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        header:hover {
+            background: linear-gradient(135deg, #7c8ff0 0%, #8a5db5 100%);
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #fff;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            border: 4px solid rgba(255,255,255,0.3);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        /* 햄버거 메뉴 버튼 */
+        .menu-toggle {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            z-index: 1002;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .menu-toggle:active {
+            transform: translateY(0);
+        }
+
+        .menu-toggle span {
+            width: 24px;
+            height: 2.5px;
+            background-color: white;
+            border-radius: 3px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-toggle.active {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            position: fixed;
+            left: -320px;
+            top: 0;
+            width: 320px;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.99);
+            backdrop-filter: blur(20px);
+            box-shadow: 4px 0 30px rgba(0,0,0,0.08);
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar nav {
+            padding: 100px 0 30px 0;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav li {
+            margin: 0;
+        }
+
+        .sidebar nav a {
+            display: flex;
+            align-items: center;
+            padding: 16px 30px;
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.05em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .sidebar nav a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.08) 0%, rgba(102, 126, 234, 0) 100%);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .sidebar nav a:hover::before {
+            width: 100%;
+        }
+
+        .sidebar nav a:hover {
+            border-left-color: #667eea;
+            color: #667eea;
+            padding-left: 35px;
+        }
+
+        .sidebar nav a::after {
+            content: '→';
+            margin-left: auto;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar nav a:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* 오버레이 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(4px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cheese-cat {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            cursor: grab;
+            z-index: 10;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .cheese-cat:active {
+            cursor: grabbing;
+        }
+
+        .cheese-cat img {
+            width: 100%;
+            height: 100%;
+            image-rendering: pixelated;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            font-size: 2em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .research-interests {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .interest-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .interest-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .contact-item span {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+
+        .experience-item {
+            margin-bottom: 30px;
+            padding-left: 20px;
+            border-left: 3px solid #667eea;
+        }
+
+        .experience-item h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .experience-item .date {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .experience-item ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .experience-item li {
+            margin-bottom: 5px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .skill-category {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #764ba2;
+        }
+
+        .skill-category h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+        }
+
+        .skill-category p {
+            color: #555;
+        }
+
+        .grant-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .grant-item h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .grant-item .date {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            section {
+                padding: 25px;
+            }
+
+            .sidebar {
+                width: 280px;
+                left: -280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 햄버거 메뉴 버튼 -->
+    <button class="menu-toggle" id="menuToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- 오버레이 -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- 사이드바 -->
+    <div class="sidebar" id="sidebar">
+        <nav>
+            <ul>
+                <li><a href="#about-me">About</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#research">Research</a></li>
+                <li><a href="#publications">Publications</a></li>
+                <li><a href="#teaching">Teaching</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <header id="header">
+        <div class="profile-image">🧠</div>
+        <h1>Yusom Jo</h1>
+        <p>Clinical Psychology Researcher</p>
+        <p>Department of Psychology, Seoul National University</p>
+    </header>
+
+    <div class="container">
+        <section id="about-me">
+            <h2>About Me</h2>
+            <p>안녕하세요, 서울대학교 심리학과 임상심리학 석사과정 조유솜입니다. Computational Clinical Science Laboratory에서 안우영 교수님의 지도 하에 연구를 진행하고 있습니다.</p>
+            <p style="margin-top: 15px;">저는 임상심리학과 계산과학을 접목하여 심리학적 현상을 이해하고 설명하는 연구에 관심을 가지고 있습니다. Python, R, Stan 등의 프로그래밍 언어를 활용하여 데이터 기반 연구를 수행하고 있습니다.</p>
+        </section>
+
+        <section id="education">
+            <h2>Education</h2>
+            
+            <div class="experience-item">
+                <h3>M.A. in Clinical Psychology</h3>
+                <p class="date">March 2025 - Present</p>
+                <p><strong>Seoul National University</strong>, Department of Psychology</p>
+                <ul>
+                    <li>Advisor: Prof. Woo-Young Ahn</li>
+                    <li>Area of Study: Clinical Psychology</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <h3>B.A. in Psychology</h3>
+                <p class="date">March 2020 - February 2025</p>
+                <p><strong>Seoul National University</strong>, Department of Psychology</p>
+                <ul>
+                    <li>Double Major in Aesthetics</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="research">
+            <h2>Research Experience</h2>
+            
+            <div class="experience-item">
+                <h3>Research Assistant</h3>
+                <p class="date">February 2023 - July 2024</p>
+                <p><strong>Computational Clinical Science Laboratory</strong></p>
+                <p>Seoul National University</p>
+                <ul>
+                    <li>Advisor: Prof. Woo-Young Ahn</li>
+                    <li>Conducting computational modeling research in clinical psychology</li>
+                </ul>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #667eea;">Grants & Awards</h3>
+            
+            <div class="grant-item">
+                <h3>Ilmok Scholarship</h3>
+                <p class="date">March 2025 - December 2025</p>
+            </div>
+
+            <div class="grant-item">
+                <h3>Macquarie Young Leaders Program</h3>
+                <p class="date">February 2021 - November 2021</p>
+            </div>
+        </section>
+
+        <section id="publications">
+            <h2>Publications</h2>
+            
+            <div class="experience-item">
+                <p style="color: #666; font-style: italic;">Publications will be updated soon.</p>
+            </div>
+        </section>
+
+        <section id="teaching">
+            <h2>Teaching Experience</h2>
+            
+            <div class="experience-item">
+                <h3>Teaching Assistant - Psychology of Addiction</h3>
+                <p class="date">September 2025 - Present</p>
+                <p>Seoul National University</p>
+            </div>
+
+            <div class="experience-item">
+                <h3>Teaching Assistant - Psychology of Interpersonal Relations</h3>
+                <p class="date">March 2025 - August 2025</p>
+                <p>Seoul National University</p>
+            </div>
+        </section>
+
+        <section id="skills">
+            <h2>Skills & Memberships</h2>
+            
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>💻 Computer Languages</h3>
+                    <p>Python, R, Stan</p>
+                </div>
+
+                <div class="skill-category">
+                    <h3>🌐 Languages</h3>
+                    <p>Korean (Native), English, Japanese</p>
+                </div>
+
+                <div class="skill-category">
+                    <h3>👥 Professional Memberships</h3>
+                    <p>Korean Psychology Association<br>
+                    Korean Clinical Psychology Association</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📧</span>
+                    <div>
+                        <strong>Email</strong><br>
+                        yaun2288@snu.ac.kr
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span>🏢</span>
+                    <div>
+                        <strong>Affiliation</strong><br>
+                        Department of Psychology<br>
+                        Seoul National University
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span>👨‍🏫</span>
+                    <div>
+                        <strong>Advisor</strong><br>
+                        Prof. Woo-Young Ahn<br>
+                        wahn55@snu.ac.kr
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Yusom Jo. All rights reserved.</p>
+        <p style="margin-top: 10px; opacity: 0.8;">Last updated: October 2025</p>
+    </footer>
+
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const sidebarLinks = document.querySelectorAll('.sidebar nav a');
+        const header = document.getElementById('header');
+
+        // 메뉴 토글
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        // 오버레이 클릭시 닫기
+        overlay.addEventListener('click', () => {
+            menuToggle.classList.remove('active');
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // 메뉴 링크 클릭시 닫기
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        });
+
+        // 치즈 고양이 기능
+        let cats = [];
+        let draggedCat = null;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        class CheeseCat {
+            constructor(x, y) {
+                const headerRect = header.getBoundingClientRect();
+                this.x = x;
+                this.y = headerRect.height - 32;
+                this.vx = (Math.random() > 0.5 ? 1 : -1) * 0.5;
+                this.isDragging = false;
+                this.state = 'walking';
+                this.stateTimer = 0;
+                this.stateDuration = this.getRandomDuration();
+                this.frame = 0;
+                this.frameTimer = 0;
+                this.frameDelay = 200;
+                
+                this.element = document.createElement('div');
+                this.element.className = 'cheese-cat';
+                
+                const img = document.createElement('div');
+                img.style.width = '32px';
+                img.style.height = '32px';
+                img.style.backgroundImage = 'url(https://raw.githubusercontent.com/0150362/0150362.github.io/main/Cat_Sprite_Sheet.png)';
+                img.style.backgroundSize = '256px 256px';
+                img.style.imageRendering = 'pixelated';
+                img.style.backgroundPosition = '0px 0px';
+                this.img = img;
+                
+                this.element.appendChild(img);
+                this.element.style.left = this.x + 'px';
+                this.element.style.top = this.y + 'px';
+                header.appendChild(this.element);
+
+                this.element.addEventListener('mousedown', (e) => {
+                    e.stopPropagation();
+                    this.isDragging = true;
+                    draggedCat = this;
+                    const rect = this.element.getBoundingClientRect();
+                    const headerRect = header.getBoundingClientRect();
+                    offsetX = e.clientX - rect.left;
+                    offsetY = e.clientY - rect.top;
+                });
+            }
+
+            getRandomDuration() {
+                return Math.random() * 3000 + 2000;
+            }
+
+            updateSprite() {
+                let row = 0;
+                let col = this.frame;
+
+                switch(this.state) {
+                    case 'walking':
+                        row = 4;
+                        col = this.frame % 8;
+                        break;
+                    case 'sitting':
+                        row = 0;
+                        col = 0;
+                        break;
+                    case 'stretching':
+                        row = 1;
+                        col = this.frame % 8;
+                        break;
+                    case 'idle':
+                        row = 0;
+                        col = this.frame % 4;
+                        break;
+                }
+
+                const xPos = -col * 32;
+                const yPos = -row * 32;
+                this.img.style.backgroundPosition = `${xPos}px ${yPos}px`;
+            }
+
+            changeState() {
+                const states = ['walking', 'sitting', 'stretching', 'idle', 'walking', 'walking'];
+                const newState = states[Math.floor(Math.random() * states.length)];
+                this.state = newState;
+                this.stateTimer = 0;
+                this.stateDuration = this.getRandomDuration();
+                this.frame = 0;
+
+                switch(this.state) {
+                    case 'walking':
+                        this.vx = (Math.random() > 0.5 ? 1 : -1) * 0.5;
+                        this.frameDelay = 150;
+                        break;
+                    case 'sitting':
+                        this.vx = 0;
+                        this.frameDelay = 500;
+                        break;
+                    case 'stretching':
+                        this.vx = 0;
+                        this.frameDelay = 200;
+                        break;
+                    case 'idle':
+                        this.vx = 0;
+                        this.frameDelay = 300;
+                        break;
+                }
+            }
+
+            update() {
+                if (this.isDragging) return;
+
+                this.stateTimer += 16;
+                if (this.stateTimer >= this.stateDuration) {
+                    this.changeState();
+                }
+
+                this.frameTimer += 16;
+                if (this.frameTimer >= this.frameDelay) {
+                    this.frameTimer = 0;
+                    this.frame++;
+                    this.updateSprite();
+                }
+
+                if (this.state === 'walking') {
+                    this.x += this.vx;
+                }
+
+                const headerRect = header.getBoundingClientRect();
+                const catWidth = 32;
+
+                this.y = headerRect.height - 32;
+
+                if (this.x <= 0 || this.x >= headerRect.width - catWidth) {
+                    if (this.state === 'walking') {
+                        this.vx *= -1;
+                        this.x = Math.max(0, Math.min(this.x, headerRect.width - catWidth));
+                    }
+                }
+
+                this.element.style.left = this.x + 'px';
+                this.element.style.top = this.y + 'px';
+                
+                if (this.state === 'walking') {
+                    if (this.vx < 0) {
+                        this.element.style.transform = 'scaleX(-1)';
+                    } else {
+                        this.element.style.transform = 'scaleX(1)';
+                    }
+                }
+            }
+
+            moveTo(x, y) {
+                const headerRect = header.getBoundingClientRect();
+                const catWidth = 32;
+
+                this.x = Math.max(0, Math.min(x, headerRect.width - catWidth));
+                this.y = Math.max(0, Math.min(y, headerRect.height - 32));
+
+                this.element.style.left = this.x + 'px';
+                this.element.style.top = this.y + 'px';
+            }
+        }
+
+        header.addEventListener('click', (e) => {
+            if (draggedCat || cats.length > 0) return;
+            
+            const rect = header.getBoundingClientRect();
+            const x = e.clientX - rect.left - 16;
+            const y = e.clientY - rect.top - 16;
+            
+            const cat = new CheeseCat(x, y);
+            cats.push(cat);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (draggedCat) {
+                const headerRect = header.getBoundingClientRect();
+                const x = e.clientX - headerRect.left - offsetX;
+                const y = e.clientY - headerRect.top - offsetY;
+                draggedCat.moveTo(x, y);
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (draggedCat) {
+                draggedCat.isDragging = false;
+                draggedCat = null;
+            }
+        });
+
+        function animate() {
+            cats.forEach(cat => cat.update());
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
