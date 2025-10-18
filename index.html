@@ -214,11 +214,12 @@
 
         .cheese-cat {
             position: absolute;
-            width: 128px;
-            height: 128px;
+            width: 64px;
+            height: 64px;
             cursor: grab;
             z-index: 10;
             image-rendering: pixelated;
+            overflow: hidden;
         }
 
         .cheese-cat:active {
@@ -419,7 +420,7 @@
             constructor(x, y) {
                 const headerRect = header.getBoundingClientRect();
                 this.x = x;
-                this.y = headerRect.height - 128;
+                this.y = headerRect.height - 64;
                 this.vx = (Math.random() > 0.5 ? 1 : -1) * 0.5;
                 this.isDragging = false;
                 this.state = 'walking';
@@ -431,13 +432,12 @@
                 
                 this.element = document.createElement('div');
                 this.element.className = 'cheese-cat';
-                this.element.style.overflow = 'hidden';
                 
                 const img = document.createElement('div');
-                img.style.width = '128px';
-                img.style.height = '128px';
+                img.style.width = '64px';
+                img.style.height = '64px';
                 img.style.backgroundImage = 'url(https://raw.githubusercontent.com/0150362/0150362.github.io/main/Cat_Sprite_Sheet.png)';
-                img.style.backgroundSize = '1024px 1024px';
+                img.style.backgroundSize = '512px 640px';
                 img.style.imageRendering = 'pixelated';
                 img.style.backgroundPosition = '0px 0px';
                 this.img = img;
@@ -464,7 +464,7 @@
             updateSprite() {
                 let row = 0;
                 let col = 0;
-                let maxFrames = 8; // 기본값
+                let maxFrames = 8;
 
                 switch(this.state) {
                     case 'sitting1':
@@ -519,8 +519,8 @@
                         break;
                 }
 
-                const xPos = -col * 128;
-                const yPos = -row * 128;
+                const xPos = -col * 64;
+                const yPos = -row * 64;
                 this.img.style.backgroundPosition = `${xPos}px ${yPos}px`;
             }
 
@@ -601,8 +601,8 @@
                 }
 
                 const headerRect = header.getBoundingClientRect();
-                const catWidth = 128;
-                this.y = headerRect.height - 128;
+                const catWidth = 64;
+                this.y = headerRect.height - 64;
 
                 if (this.x <= 0 || this.x >= headerRect.width - catWidth) {
                     if (this.state === 'walking') {
@@ -625,19 +625,19 @@
 
             moveTo(x, y) {
                 const headerRect = header.getBoundingClientRect();
-                const catWidth = 128;
+                const catWidth = 64;
                 this.x = Math.max(0, Math.min(x, headerRect.width - catWidth));
-                this.y = Math.max(0, Math.min(y, headerRect.height - 128));
+                this.y = Math.max(0, Math.min(y, headerRect.height - 64));
                 this.element.style.left = this.x + 'px';
                 this.element.style.top = this.y + 'px';
             }
         }
 
         header.addEventListener('click', (e) => {
-            if (draggedCat || cats.length > 0) return; // 이미 고양이가 있으면 추가 안함
+            if (draggedCat || cats.length > 0) return;
             const rect = header.getBoundingClientRect();
-            const x = e.clientX - rect.left - 64;
-            const y = e.clientY - rect.top - 64;
+            const x = e.clientX - rect.left - 32;
+            const y = e.clientY - rect.top - 32;
             const cat = new CheeseCat(x, y);
             cats.push(cat);
         });
