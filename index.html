@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yusom Jo - About</title>
+    <title>index.html</title>
     <style>
         * {
             margin: 0;
@@ -55,13 +55,14 @@
 
         header h1 {
             font-size: 2em;
-            margin-bottom: 8px;
+            margin-bottom: 15px;
         }
 
-        header p {
-            font-size: 1em;
-            opacity: 0.9;
-            margin-bottom: 5px;
+        .keywords {
+            font-size: 0.95em;
+            opacity: 0.95;
+            font-weight: 400;
+            letter-spacing: 0.3px;
         }
 
         .menu-toggle {
@@ -337,8 +338,7 @@
             <img src="profile.png" alt="Yusom Jo">
         </div>
         <h1>Yusom Jo</h1>
-        <p>Clinical Psychology Researcher</p>
-        <p>Department of Psychology, Seoul National University</p>
+        <p class="keywords">Computational Psychiatry · Decision-making · Neuroscience · Addiction Disorder</p>
     </header>
 
     <div class="container">
@@ -462,24 +462,48 @@
 
             updateSprite() {
                 let row = 0;
-                let col = this.frame;
+                let col = 0;
 
                 switch(this.state) {
+                    case 'sitting1':
+                        row = 0;
+                        col = this.frame % 8;
+                        break;
+                    case 'sitting2':
+                        row = 1;
+                        col = this.frame % 8;
+                        break;
+                    case 'grooming1':
+                        row = 2;
+                        col = this.frame % 8;
+                        break;
+                    case 'grooming2':
+                        row = 3;
+                        col = this.frame % 8;
+                        break;
                     case 'walking':
                         row = 4;
                         col = this.frame % 8;
                         break;
-                    case 'sitting':
-                        row = 0;
-                        col = 0;
-                        break;
-                    case 'stretching':
-                        row = 1;
+                    case 'running':
+                        row = 5;
                         col = this.frame % 8;
                         break;
-                    case 'idle':
-                        row = 0;
-                        col = this.frame % 4;
+                    case 'sleeping':
+                        row = 6;
+                        col = this.frame % 8;
+                        break;
+                    case 'playing':
+                        row = 7;
+                        col = this.frame % 8;
+                        break;
+                    case 'jumping':
+                        row = 8;
+                        col = this.frame % 8;
+                        break;
+                    case 'stretching':
+                        row = 9;
+                        col = this.frame % 8;
                         break;
                 }
 
@@ -489,7 +513,16 @@
             }
 
             changeState() {
-                const states = ['walking', 'sitting', 'stretching', 'idle', 'walking', 'walking'];
+                const states = [
+                    'walking', 'walking', 'walking',
+                    'running',
+                    'sitting1', 'sitting2',
+                    'grooming1', 'grooming2',
+                    'sleeping',
+                    'playing',
+                    'jumping',
+                    'stretching'
+                ];
                 const newState = states[Math.floor(Math.random() * states.length)];
                 this.state = newState;
                 this.stateTimer = 0;
@@ -501,19 +534,39 @@
                         this.vx = (Math.random() > 0.5 ? 1 : -1) * 0.5;
                         this.frameDelay = 150;
                         break;
-                    case 'sitting':
+                    case 'running':
+                        this.vx = (Math.random() > 0.5 ? 1 : -1) * 1.0;
+                        this.frameDelay = 100;
+                        break;
+                    case 'sitting1':
+                    case 'sitting2':
+                        this.vx = 0;
+                        this.frameDelay = 200;
+                        break;
+                    case 'grooming1':
+                    case 'grooming2':
+                        this.vx = 0;
+                        this.frameDelay = 180;
+                        break;
+                    case 'sleeping':
                         this.vx = 0;
                         this.frameDelay = 500;
+                        break;
+                    case 'playing':
+                        this.vx = 0;
+                        this.frameDelay = 120;
+                        break;
+                    case 'jumping':
+                        this.vx = 0;
+                        this.frameDelay = 100;
                         break;
                     case 'stretching':
                         this.vx = 0;
                         this.frameDelay = 200;
                         break;
-                    case 'idle':
-                        this.vx = 0;
-                        this.frameDelay = 300;
-                        break;
                 }
+                
+                this.updateSprite();
             }
 
             update() {
@@ -524,14 +577,11 @@
                     this.changeState();
                 }
 
-                // 걷는 상태일 때만 프레임 애니메이션
-                if (this.state === 'walking' || this.state === 'stretching') {
-                    this.frameTimer += 16;
-                    if (this.frameTimer >= this.frameDelay) {
-                        this.frameTimer = 0;
-                        this.frame++;
-                        this.updateSprite();
-                    }
+                this.frameTimer += 16;
+                if (this.frameTimer >= this.frameDelay) {
+                    this.frameTimer = 0;
+                    this.frame++;
+                    this.updateSprite();
                 }
 
                 if (this.state === 'walking') {
