@@ -199,6 +199,49 @@
             transform: translateX(0);
         }
 
+        /* 서브메뉴 스타일 */
+        .submenu {
+            list-style: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8f9fa;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .menu-item:hover .submenu {
+            max-height: 200px;
+        }
+
+        .submenu a {
+            font-size: 0.95em;
+            padding: 12px 30px 12px 50px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .submenu a:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .submenu a::after {
+            content: '';
+        }
+
+        .menu-item > a::after {
+            content: '▼';
+            font-size: 0.7em;
+            margin-left: auto;
+            transition: transform 0.3s;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .menu-item:hover > a::after {
+            transform: rotate(180deg) translateX(0);
+        }
+
         /* 오버레이 */
         .overlay {
             position: fixed;
@@ -244,7 +287,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px 20px 40px 20px;
+            padding: 0px 20px 40px 20px;
         }
 
         section {
@@ -257,13 +300,30 @@
 
         /* About Me 섹션 - 전체 화면 */
         #about-me {
-            min-height: calc(100vh - 250px);
+            min-height: 60vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             margin-bottom: 0;
             border-radius: 0;
-            padding: 20px 40px 30px 40px;
+            padding: 10px 40px 30px 40px;
+        }
+
+        /* Contact 섹션 - About과 같은 페이지 */
+        #contact {
+            min-height: 40vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-bottom: 0;
+            border-radius: 0;
+            padding: 30px 40px;
+        }
+
+        /* CV와 Publications는 별도 페이지 */
+        #cv, #publications {
+            min-height: 100vh;
+            padding-top: 40px;
         }
 
         /* 나머지 섹션들 컨테이너 */
@@ -425,23 +485,22 @@
     <div class="sidebar" id="sidebar">
         <nav>
             <ul>
-                <li><a href="#about-me">About</a></li>
-                <li><a href="#cv">CV</a></li>
-                <li><a href="#education">Education</a></li>
-                <li><a href="#research">Research</a></li>
+                <li class="menu-item">
+                    <a href="#about-me">About</a>
+                    <ul class="submenu">
+                        <li><a href="#about-me">About Me</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </li>
                 <li><a href="#publications">Publications</a></li>
-                <li><a href="#teaching">Teaching</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#cv">CV</a></li>
             </ul>
         </nav>
     </div>
 
     <header id="header">
         <div class="profile-image">
-            <!-- 프로필 사진을 넣으려면 아래 img 태그의 주석을 해제하고 src에 이미지 URL을 넣으세요 -->
-            <!-- <img src="profile.jpg" alt="Yusom Jo"> -->
-            🧠
+            <img src="https://0150362.github.io/profile.png" alt="Yusom Jo">
         </div>
         <h1>Yusom Jo</h1>
         <p>Clinical Psychology Researcher</p>
@@ -455,6 +514,45 @@
             <p style="margin-top: 15px;">My research focuses on computational and neural mechanisms underlying addiction. In particular, I aim to explore how psychological processes such as craving are represented in the brain and captured through computational modeling. Through this work, I seek to deepen our understanding of the psychological and neural mechanisms underlying addiction.</p>
             <p style="margin-top: 20px; font-style: italic; color: #666;">For more details about my background and experience, please see my <a href="#cv" style="color: #667eea; text-decoration: none; font-weight: 600; border-bottom: 2px solid #667eea;">CV</a>.</p>
         </section>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>📧</span>
+                    <div>
+                        <strong>Email</strong><br>
+                        <a href="mailto:yaun2288@snu.ac.kr" style="color: #667eea; text-decoration: none;">yaun2288@snu.ac.kr</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span>💻</span>
+                    <div>
+                        <strong>GitHub</strong><br>
+                        <a href="https://github.com/0150362" target="_blank" style="color: #667eea; text-decoration: none;">github.com/0150362</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span>🎓</span>
+                    <div>
+                        <strong>Google Scholar</strong><br>
+                        <a href="https://0150362.github.io" target="_blank" style="color: #667eea; text-decoration: none;">Coming Soon</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="other-sections">
+        <div class="container">
+        <section id="publications">
+            <h2>Publications</h2>
+            
+            <div class="experience-item">
+                <p style="color: #666; font-style: italic;">Publications will be updated soon.</p>
+            </div>
+        </section>
+        </div>
     </div>
 
     <div class="other-sections">
@@ -482,131 +580,6 @@
             <p style="margin-top: 20px; text-align: center; color: #666; font-size: 0.9em;">
                 If the PDF does not display, please <a href="CV.pdf" download style="color: #667eea; text-decoration: underline;">download it here</a>.
             </p>
-        </section>
-
-        <section id="education">
-            <h2>Education</h2>
-            
-            <div class="experience-item">
-                <h3>M.A. in Clinical Psychology</h3>
-                <p class="date">March 2025 - Present</p>
-                <p><strong>Seoul National University</strong>, Department of Psychology</p>
-                <ul>
-                    <li>Advisor: Prof. Woo-Young Ahn</li>
-                    <li>Area of Study: Clinical Psychology</li>
-                </ul>
-            </div>
-
-            <div class="experience-item">
-                <h3>B.A. in Psychology</h3>
-                <p class="date">March 2020 - February 2025</p>
-                <p><strong>Seoul National University</strong>, Department of Psychology</p>
-                <ul>
-                    <li>Double Major in Aesthetics</li>
-                </ul>
-            </div>
-        </section>
-
-        <section id="research">
-            <h2>Research Experience</h2>
-            
-            <div class="experience-item">
-                <h3>Research Assistant</h3>
-                <p class="date">February 2023 - July 2024</p>
-                <p><strong>Computational Clinical Science Laboratory</strong></p>
-                <p>Seoul National University</p>
-                <ul>
-                    <li>Advisor: Prof. Woo-Young Ahn</li>
-                    <li>Conducting computational modeling research in clinical psychology</li>
-                </ul>
-            </div>
-
-            <h3 style="margin-top: 30px; color: #667eea;">Grants & Awards</h3>
-            
-            <div class="grant-item">
-                <h3>Ilmok Scholarship</h3>
-                <p class="date">March 2025 - December 2025</p>
-            </div>
-
-            <div class="grant-item">
-                <h3>Macquarie Young Leaders Program</h3>
-                <p class="date">February 2021 - November 2021</p>
-            </div>
-        </section>
-
-        <section id="publications">
-            <h2>Publications</h2>
-            
-            <div class="experience-item">
-                <p style="color: #666; font-style: italic;">Publications will be updated soon.</p>
-            </div>
-        </section>
-
-        <section id="teaching">
-            <h2>Teaching Experience</h2>
-            
-            <div class="experience-item">
-                <h3>Teaching Assistant - Psychology of Addiction</h3>
-                <p class="date">September 2025 - Present</p>
-                <p>Seoul National University</p>
-            </div>
-
-            <div class="experience-item">
-                <h3>Teaching Assistant - Psychology of Interpersonal Relations</h3>
-                <p class="date">March 2025 - August 2025</p>
-                <p>Seoul National University</p>
-            </div>
-        </section>
-
-        <section id="skills">
-            <h2>Skills & Memberships</h2>
-            
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>💻 Computer Languages</h3>
-                    <p>Python, R, Stan</p>
-                </div>
-
-                <div class="skill-category">
-                    <h3>🌐 Languages</h3>
-                    <p>Korean (Native), English, Japanese</p>
-                </div>
-
-                <div class="skill-category">
-                    <h3>👥 Professional Memberships</h3>
-                    <p>Korean Psychology Association<br>
-                    Korean Clinical Psychology Association</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact">
-            <h2>Contact</h2>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <span>📧</span>
-                    <div>
-                        <strong>Email</strong><br>
-                        yaun2288@snu.ac.kr
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <span>🏢</span>
-                    <div>
-                        <strong>Affiliation</strong><br>
-                        Department of Psychology<br>
-                        Seoul National University
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <span>👨‍🏫</span>
-                    <div>
-                        <strong>Advisor</strong><br>
-                        Prof. Woo-Young Ahn<br>
-                        wahn55@snu.ac.kr
-                    </div>
-                </div>
-            </div>
         </section>
         </div>
     </div>
