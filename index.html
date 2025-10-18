@@ -524,11 +524,14 @@
                     this.changeState();
                 }
 
-                this.frameTimer += 16;
-                if (this.frameTimer >= this.frameDelay) {
-                    this.frameTimer = 0;
-                    this.frame++;
-                    this.updateSprite();
+                // 걷는 상태일 때만 프레임 애니메이션
+                if (this.state === 'walking' || this.state === 'stretching') {
+                    this.frameTimer += 16;
+                    if (this.frameTimer >= this.frameDelay) {
+                        this.frameTimer = 0;
+                        this.frame++;
+                        this.updateSprite();
+                    }
                 }
 
                 if (this.state === 'walking') {
