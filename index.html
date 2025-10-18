@@ -213,8 +213,8 @@
 
         .cheese-cat {
             position: absolute;
-            width: 32px;
-            height: 32px;
+            width: 64px;
+            height: 64px;
             cursor: grab;
             z-index: 10;
             image-rendering: pixelated;
@@ -421,8 +421,8 @@
     <div class="container">
         <section id="about-me">
             <h2>About Me</h2>
-            <p>안녕하세요, 서울대학교 심리학과 임상심리학 석사과정 조유솜입니다. Computational Clinical Science Laboratory에서 안우영 교수님의 지도 하에 연구를 진행하고 있습니다.</p>
-            <p style="margin-top: 15px;">저는 임상심리학과 계산과학을 접목하여 심리학적 현상을 이해하고 설명하는 연구에 관심을 가지고 있습니다. Python, R, Stan 등의 프로그래밍 언어를 활용하여 데이터 기반 연구를 수행하고 있습니다.</p>
+            <p>Hello! I am Yusom Jo, a master's student in Clinical Psychology at Seoul National University. I am conducting research under the supervision of Professor Woo-Young Ahn at the <a href="https://ccs-lab.github.io/" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600; border-bottom: 2px solid #667eea;">Computational Clinical Science Laboratory</a>.</p>
+            <p style="margin-top: 15px;">I am interested in research that integrates clinical psychology and computational science to understand and explain psychological phenomena. I conduct data-driven research using programming languages such as Python, R, and Stan.</p>
         </section>
 
         <section id="education">
@@ -596,7 +596,7 @@
             constructor(x, y) {
                 const headerRect = header.getBoundingClientRect();
                 this.x = x;
-                this.y = headerRect.height - 32;
+                this.y = headerRect.height - 64;
                 this.vx = (Math.random() > 0.5 ? 1 : -1) * 0.5;
                 this.isDragging = false;
                 this.state = 'walking';
@@ -610,10 +610,10 @@
                 this.element.className = 'cheese-cat';
                 
                 const img = document.createElement('div');
-                img.style.width = '32px';
-                img.style.height = '32px';
+                img.style.width = '64px';
+                img.style.height = '64px';
                 img.style.backgroundImage = 'url(https://raw.githubusercontent.com/0150362/0150362.github.io/main/Cat_Sprite_Sheet.png)';
-                img.style.backgroundSize = '256px 256px';
+                img.style.backgroundSize = '512px 512px';
                 img.style.imageRendering = 'pixelated';
                 img.style.backgroundPosition = '0px 0px';
                 this.img = img;
@@ -661,8 +661,8 @@
                         break;
                 }
 
-                const xPos = -col * 32;
-                const yPos = -row * 32;
+                const xPos = -col * 64;
+                const yPos = -row * 64;
                 this.img.style.backgroundPosition = `${xPos}px ${yPos}px`;
             }
 
@@ -714,9 +714,9 @@
                 }
 
                 const headerRect = header.getBoundingClientRect();
-                const catWidth = 32;
+                const catWidth = 64;
 
-                this.y = headerRect.height - 32;
+                this.y = headerRect.height - 64;
 
                 if (this.x <= 0 || this.x >= headerRect.width - catWidth) {
                     if (this.state === 'walking') {
@@ -739,10 +739,10 @@
 
             moveTo(x, y) {
                 const headerRect = header.getBoundingClientRect();
-                const catWidth = 32;
+                const catWidth = 64;
 
                 this.x = Math.max(0, Math.min(x, headerRect.width - catWidth));
-                this.y = Math.max(0, Math.min(y, headerRect.height - 32));
+                this.y = Math.max(0, Math.min(y, headerRect.height - 64));
 
                 this.element.style.left = this.x + 'px';
                 this.element.style.top = this.y + 'px';
@@ -753,8 +753,8 @@
             if (draggedCat || cats.length > 0) return;
             
             const rect = header.getBoundingClientRect();
-            const x = e.clientX - rect.left - 16;
-            const y = e.clientY - rect.top - 16;
+            const x = e.clientX - rect.left - 32;
+            const y = e.clientY - rect.top - 32;
             
             const cat = new CheeseCat(x, y);
             cats.push(cat);
